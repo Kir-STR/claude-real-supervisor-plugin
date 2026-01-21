@@ -1,0 +1,57 @@
+# Runtime directories and state files
+.supervisor/
+*/.supervisor/
+
+# User-specific settings
+.claude/settings.local.json
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.*.sw?
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/
+
+# Node modules (if any development tools are added)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Python cache (if any development tools are added)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Build artifacts
+dist/
+build/
+
+# Test outputs
+test-output/
+.pytest_cache/
+coverage/
+
+# Backup files
+*.bak
+*.backup
+
+# Old supervisor-skill directory (deprecated, for reference only)
+# Uncomment the following line if you want to exclude it from git
+# supervisor-skill/

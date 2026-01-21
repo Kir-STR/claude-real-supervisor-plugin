@@ -1,0 +1,46 @@
+{
+  "name": "real-supervisor",
+  "displayName": "Real Supervisor (RS)",
+  "version": "1.0.0",
+  "description": "A powerful Claude Code plugin that orchestrates complex, multi-step projects through a structured, resumable workflow with specialized worker agents.",
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/claude-real-supervisor-plugin.git"
+  },
+  "keywords": [
+    "supervisor",
+    "orchestration",
+    "workflow",
+    "agents",
+    "project-management",
+    "automation",
+    "resumable",
+    "checkpoints"
+  ],
+  "main": ".claude/skills/real-supervisor/SKILL.md",
+  "skills": [
+    {
+      "name": "real-supervisor",
+      "path": ".claude/skills/real-supervisor",
+      "description": "Orchestrates complex projects through specialized worker agents",
+      "commands": [
+        "supervisor",
+        "rs"
+      ]
+    }
+  ],
+  "settings": {
+    "configPath": ".claude/settings.json"
+  },
+  "dependencies": {},
+  "engines": {
+    "claudeCode": ">=1.0.0"
+  },
+  "categories": [
+    "productivity",
+    "automation",
+    "project-management"
+  ]
+}

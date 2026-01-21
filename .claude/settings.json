@@ -1,0 +1,33 @@
+{
+  "skills": {
+    "real-supervisor": {
+      "enabled": true,
+      "aliases": ["rs", "supervisor"]
+    }
+  },
+  "hooks": {
+    "command": {
+      "rs": {
+        "type": "skill",
+        "skill": "real-supervisor",
+        "description": "Invoke the Real Supervisor skill with a PRD file"
+      },
+      "supervisor": {
+        "type": "skill",
+        "skill": "real-supervisor",
+        "description": "Invoke the Real Supervisor skill with a PRD file"
+      }
+    }
+  },
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Grep(*)",
+      "Glob(*)",
+      "Task(*)"
+    ]
+  }
+}
