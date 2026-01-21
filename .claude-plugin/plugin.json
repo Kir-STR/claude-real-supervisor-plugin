@@ -3,11 +3,11 @@
   "displayName": "Real Supervisor (RS)",
   "version": "1.0.0",
   "description": "A powerful Claude Code plugin that orchestrates complex, multi-step projects through a structured, resumable workflow with specialized worker agents.",
-  "author": "Your Name",
+  "author": "Kirill-SDT",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOUR_USERNAME/claude-real-supervisor-plugin.git"
+    "url": "https://github.com/Kir-STR/claude-real-supervisor-plugin.git"
   },
   "keywords": [
     "supervisor",

@@ -29,7 +29,7 @@ The **Real Supervisor Plugin** implements the **Supervisor Pattern** - it acts a
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/claude-real-supervisor-plugin.git
+git clone https://github.com/Kir-STR/claude-real-supervisor-plugin.git
 
 # Navigate to your Claude Code plugins directory
 # Linux/Mac

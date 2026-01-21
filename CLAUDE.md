@@ -79,7 +79,7 @@ The plugin implements a supervisor-worker architecture where:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/claude-real-supervisor-plugin.git
+   git clone https://github.com/Kir-STR/claude-real-supervisor-plugin.git
    cd claude-real-supervisor-plugin
    ```
 
