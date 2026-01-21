@@ -1,5 +1,10 @@
 # Real Supervisor (RS) Plugin for Claude Code
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/Kir-STR/claude-real-supervisor-plugin/releases)
+[![GitHub issues](https://img.shields.io/github/issues/Kir-STR/claude-real-supervisor-plugin)](https://github.com/Kir-STR/claude-real-supervisor-plugin/issues)
+[![GitHub stars](https://img.shields.io/github/stars/Kir-STR/claude-real-supervisor-plugin)](https://github.com/Kir-STR/claude-real-supervisor-plugin/stargazers)
+
 A powerful Claude Code plugin that orchestrates complex, multi-step projects through a structured, resumable workflow with specialized worker agents.
 
 ## Overview
