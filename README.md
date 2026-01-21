@@ -1,9 +1,9 @@
 # Real Supervisor (RS) Plugin for Claude Code
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/Kir-STR/claude-real-supervisor-plugin/releases)
-[![GitHub issues](https://img.shields.io/github/issues/Kir-STR/claude-real-supervisor-plugin)](https://github.com/Kir-STR/claude-real-supervisor-plugin/issues)
-[![GitHub stars](https://img.shields.io/github/stars/Kir-STR/claude-real-supervisor-plugin)](https://github.com/Kir-STR/claude-real-supervisor-plugin/stargazers)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/Kir-STR/claude-real-tools/releases)
+[![GitHub issues](https://img.shields.io/github/issues/Kir-STR/claude-real-tools)](https://github.com/Kir-STR/claude-real-tools/issues)
+[![GitHub stars](https://img.shields.io/github/stars/Kir-STR/claude-real-tools)](https://github.com/Kir-STR/claude-real-tools/stargazers)
 
 A powerful Claude Code plugin that orchestrates complex, multi-step projects through a structured, resumable workflow with specialized worker agents.
 
@@ -28,44 +28,58 @@ The **Real Supervisor Plugin** implements the **Supervisor Pattern** - it acts a
 - Claude Code CLI installed and configured
 - Basic familiarity with command line operations
 
-### Installation Steps
+### Recommended: Install via Marketplace
 
-#### Option 1: Clone from GitHub
+The easiest way to install the plugin is through the Claude Code marketplace:
+
+```bash
+# Add the marketplace
+/plugin marketplace add Kir-STR/claude-real-tools
+
+# Install the plugin
+/plugin install real-supervisor@real-tools
+
+# Verify installation
+/plugins
+```
+
+This method automatically handles updates and version management.
+
+### Alternative Installation Methods
+
+#### Option 1: Clone and Symlink (Development)
+
+For local development or testing:
 
 ```bash
 # Clone the repository
-git clone https://github.com/Kir-STR/claude-real-supervisor-plugin.git
+git clone https://github.com/Kir-STR/claude-real-tools.git
 
-# Navigate to your Claude Code plugins directory
+# Create symlink to plugins directory
 # Linux/Mac
-cd ~/.config/claude-code/plugins/
+ln -s $(pwd)/claude-real-tools ~/.config/claude-code/plugins/real-supervisor
 
-# Windows
-cd %APPDATA%\claude-code\plugins\
-
-# Create a symlink to the cloned repository
-# Linux/Mac
-ln -s /path/to/claude-real-supervisor-plugin real-supervisor
-
-# Windows (PowerShell, run as Administrator)
-New-Item -ItemType SymbolicLink -Path "real-supervisor" -Target "C:\path\to\claude-real-supervisor-plugin"
+# Windows (PowerShell, as Administrator)
+New-Item -ItemType SymbolicLink -Path "$env:APPDATA\claude-code\plugins\real-supervisor" -Target "$(Get-Location)\claude-real-tools"
 ```
 
-#### Option 2: Manual Installation
+#### Option 2: Manual Copy
 
 ```bash
-# Download or extract the plugin to your Claude Code plugins directory
+# Clone the repository
+git clone https://github.com/Kir-STR/claude-real-tools.git
 
+# Copy to plugins directory
 # Linux/Mac
-cp -r claude-real-supervisor-plugin ~/.config/claude-code/plugins/real-supervisor
+cp -r claude-real-tools ~/.config/claude-code/plugins/real-supervisor
 
 # Windows (PowerShell)
-Copy-Item -Recurse claude-real-supervisor-plugin "$env:APPDATA\claude-code\plugins\real-supervisor"
+Copy-Item -Recurse claude-real-tools "$env:APPDATA\claude-code\plugins\real-supervisor"
 ```
 
 ### Post-Installation
 
-1. **Reload plugins** in Claude Code:
+1. **Reload plugins** in Claude Code (if not using marketplace method):
    ```
    /reload-plugins
    ```
@@ -492,7 +506,7 @@ After installation, the plugin structure is:
 ```
 real-supervisor/
 ├── .claude/
-│   ├── settings.json                            # Plugin settings and hooks
+│   ├── settings.json                            # Project settings
 │   └── skills/
 │       └── real-supervisor/                     # The supervisor skill
 │           ├── SKILL.md                         # Core supervisor instructions
@@ -503,8 +517,15 @@ real-supervisor/
 │               ├── example_session_log.json
 │               ├── example_spec_schema.md
 │               └── workflow_diagram.md
-└── .claude-plugin/
-    └── plugin.json                              # Plugin manifest
+├── .claude-plugin/
+│   ├── plugin.json                              # Plugin manifest
+│   └── marketplace.json                         # Marketplace metadata
+├── commands/
+│   ├── supervisor.md                            # /supervisor command
+│   └── rs.md                                    # /rs command (alias)
+└── hooks/
+    ├── hooks.json                               # Plugin hooks configuration
+    └── README.md                                # Hooks documentation
 ```
 
 ## Contributing
@@ -543,8 +564,9 @@ Built on Claude Code's powerful agent orchestration capabilities. Inspired by th
 ---
 
 **Quick Reference**:
-- Install: Clone repo → symlink to plugins directory → `/reload-plugins`
-- Usage: `rs path/to/prd.md`
+- Install: `/plugin marketplace add Kir-STR/claude-real-tools` → `/plugin install real-supervisor@real-tools`
+- Usage: `/rs path/to/prd.md` or `/supervisor path/to/prd.md`
 - Resume: Re-run same command after interruption
 - Checkpoints: Use `/rewind` to return to saved states
 - Output: Check `.supervisor/output/` for all generated files
+- Marketplace: See [MARKETPLACE.md](MARKETPLACE.md) for distribution details

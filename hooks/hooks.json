@@ -1,0 +1,36 @@
+{
+  "description": "Real Supervisor plugin hooks for enhanced workflow management and logging",
+  "hooks": {
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Log the subagent outputs to the supervisor session log for audit trail purposes"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "When a new session starts with the Real Supervisor plugin active, check if there are any interrupted supervisor sessions that can be resumed"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "If files are created or modified in the .supervisor/ directory, ensure they are properly formatted and valid JSON/Markdown"
+          }
+        ]
+      }
+    ]
+  }
+}

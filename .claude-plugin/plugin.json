@@ -1,14 +1,15 @@
 {
   "name": "real-supervisor",
-  "displayName": "Real Supervisor (RS)",
   "version": "1.0.0",
   "description": "A powerful Claude Code plugin that orchestrates complex, multi-step projects through a structured, resumable workflow with specialized worker agents.",
-  "author": "Kirill Bogdanov",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Kir-STR/claude-real-supervisor-plugin.git"
+  "author": {
+    "name": "Kirill Bogdanov",
+    "email": "",
+    "url": "https://github.com/Kir-STR"
   },
+  "homepage": "https://github.com/Kir-STR/claude-real-tools",
+  "repository": "https://github.com/Kir-STR/claude-real-tools.git",
+  "license": "MIT",
   "keywords": [
     "supervisor",
     "orchestration",
@@ -19,28 +20,6 @@
     "resumable",
     "checkpoints"
   ],
-  "main": ".claude/skills/real-supervisor/SKILL.md",
-  "skills": [
-    {
-      "name": "real-supervisor",
-      "path": ".claude/skills/real-supervisor",
-      "description": "Orchestrates complex projects through specialized worker agents",
-      "commands": [
-        "supervisor",
-        "rs"
-      ]
-    }
-  ],
-  "settings": {
-    "configPath": ".claude/settings.json"
-  },
-  "dependencies": {},
-  "engines": {
-    "claudeCode": ">=1.0.0"
-  },
-  "categories": [
-    "productivity",
-    "automation",
-    "project-management"
-  ]
+  "skills": "./.claude/skills/",
+  "hooks": "./hooks/hooks.json"
 }

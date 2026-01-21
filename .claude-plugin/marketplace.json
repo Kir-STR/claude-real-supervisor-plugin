@@ -1,0 +1,47 @@
+{
+  "name": "real-tools",
+  "owner": {
+    "name": "Kirill Bogdanov",
+    "email": ""
+  },
+  "metadata": {
+    "description": "Real Tools marketplace - orchestrate complex projects through structured, resumable workflows with the Real Supervisor plugin",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "real-supervisor",
+      "source": ".",
+      "description": "A powerful Claude Code plugin that orchestrates complex, multi-step projects through a structured, resumable workflow with specialized worker agents.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Kirill Bogdanov",
+        "email": ""
+      },
+      "homepage": "https://github.com/Kir-STR/claude-real-tools",
+      "repository": "https://github.com/Kir-STR/claude-real-tools.git",
+      "license": "MIT",
+      "keywords": [
+        "supervisor",
+        "orchestration",
+        "workflow",
+        "agents",
+        "project-management",
+        "automation",
+        "resumable",
+        "checkpoints",
+        "human-in-the-loop",
+        "state-machine",
+        "multi-agent"
+      ],
+      "category": "productivity",
+      "tags": [
+        "workflow-automation",
+        "project-orchestration",
+        "multi-step-tasks",
+        "agent-coordination",
+        "resumable-sessions"
+      ]
+    }
+  ]
+}

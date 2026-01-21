@@ -4,10 +4,10 @@ This file provides guidance to Claude Code when working with code in this reposi
 
 ## Project Overview
 
-This repository contains the **Real Supervisor (RS) Plugin** - a Claude Code plugin that orchestrates complex, multi-step projects through specialized worker agents following a structured, resumable workflow.
+This repository is the **Real Tools Marketplace** - a Claude Code plugin marketplace that contains the **Real Supervisor Plugin**. The Real Supervisor plugin orchestrates complex, multi-step projects through specialized worker agents following a structured, resumable workflow.
 
 ### Project Type
-Claude Code plugin with embedded skill (no build process required)
+Claude Code plugin marketplace containing the Real Supervisor plugin (no build process required)
 
 ### Primary Language
 Markdown (documentation and skill instructions)
@@ -15,13 +15,16 @@ Markdown (documentation and skill instructions)
 ## Repository Structure
 
 ```
-rs-plugin/
+claude-real-tools/                               # Marketplace repository
 ├── CLAUDE.md                                    # This file (dev guide)
 ├── README.md                                    # User-facing documentation (GitHub)
+├── MARKETPLACE.md                               # Marketplace documentation
+├── PLUGIN_STRUCTURE.md                          # Plugin structure reference
+├── CHANGES_SUMMARY.md                           # Changes log
 ├── LICENSE                                      # MIT License
 ├── .gitignore                                   # Git ignore rules
-├── .claude/                                     # Claude Code plugin configuration
-│   ├── settings.json                            # Plugin settings and hooks
+├── .claude/                                     # Claude Code skill configuration
+│   ├── settings.json                            # Project settings
 │   └── skills/
 │       └── real-supervisor/                     # The supervisor skill
 │           ├── SKILL.md                         # Core supervisor agent instructions
@@ -32,9 +35,15 @@ rs-plugin/
 │               ├── example_session_log.json     # Session logging example
 │               ├── example_spec_schema.md       # Specification schema template
 │               └── workflow_diagram.md          # Visual workflow documentation
-├── .claude-plugin/                              # Plugin manifest
-│   └── plugin.json                              # Plugin metadata and configuration
-└── supervisor-skill/                            # Original skill files (deprecated, for reference)
+├── .claude-plugin/                              # Plugin manifest & marketplace config
+│   ├── plugin.json                              # Plugin metadata and configuration
+│   └── marketplace.json                         # Marketplace listing metadata
+├── commands/                                    # Command shortcuts
+│   ├── supervisor.md                            # /supervisor command (full name)
+│   └── rs.md                                    # /rs command (short alias)
+└── hooks/                                       # Plugin hooks
+    ├── hooks.json                               # Hook definitions (SubagentStop, SessionStart, PostToolUse)
+    └── README.md                                # Hooks documentation
 ```
 
 ## Architecture Overview
@@ -77,10 +86,10 @@ The plugin implements a supervisor-worker architecture where:
 
 ### Installing the Plugin for Development
 
-1. **Clone the repository**:
+1. **Clone the marketplace repository**:
    ```bash
-   git clone https://github.com/Kir-STR/claude-real-supervisor-plugin.git
-   cd claude-real-supervisor-plugin
+   git clone https://github.com/Kir-STR/claude-real-tools.git
+   cd claude-real-tools
    ```
 
 2. **Install locally**:
@@ -124,10 +133,11 @@ Edit `.claude/skills/real-supervisor/agents.md` to:
 - Change agent selection criteria
 
 #### Update Hooks
-Edit `.claude/settings.json` to:
-- Modify command aliases
-- Add new hooks or event handlers
-- Adjust plugin behavior
+Edit `hooks/hooks.json` to:
+- Add new plugin hooks (SubagentStop, SessionStart, PostToolUse, etc.)
+- Modify existing hook behavior
+- Add prompt-based or command-based hooks
+- Use `${CLAUDE_PLUGIN_ROOT}` to reference plugin files in commands
 
 #### Update Documentation
 - `README.md`: User-facing documentation for GitHub
@@ -241,8 +251,13 @@ Focus is on core task execution from PRD to deliverable.
 
 ## Additional Resources
 
+- **Repository**: https://github.com/Kir-STR/claude-real-tools
 - User documentation: `README.md` (root)
 - Plugin manifest: `.claude-plugin/plugin.json`
+- Marketplace config: `.claude-plugin/marketplace.json`
+- Distribution guide: `MARKETPLACE.md`
+- Plugin structure reference: `PLUGIN_STRUCTURE.md`
+- Changes log: `CHANGES_SUMMARY.md`
 - Skill instructions: `.claude/skills/real-supervisor/SKILL.md`
 - Workflow visualization: `.claude/skills/real-supervisor/examples/workflow_diagram.md`
 - Example PRD: `.claude/skills/real-supervisor/examples/example_prd.md`
