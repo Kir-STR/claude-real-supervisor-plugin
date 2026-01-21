@@ -18,16 +18,5 @@
         "description": "Invoke the Real Supervisor skill with a PRD file"
       }
     }
-  },
-  "permissions": {
-    "allow": [
-      "Bash(*)",
-      "Read(*)",
-      "Write(*)",
-      "Edit(*)",
-      "Grep(*)",
-      "Glob(*)",
-      "Task(*)"
-    ]
   }
 }
