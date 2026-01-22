@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 ## Project Type
-Claude Code plugin marketplace
+Claude Code plugin marketplace **Real Tools**
 
 ## Repository Structure
 

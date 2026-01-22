@@ -13,6 +13,7 @@
     ],
     "SessionStart": [
       {
+        "when": "startup",
         "hooks": [
           {
             "type": "prompt",
