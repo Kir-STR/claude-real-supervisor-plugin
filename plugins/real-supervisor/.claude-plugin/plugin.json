@@ -20,6 +20,8 @@
     "resumable",
     "checkpoints"
   ],
-  "skills": "./.claude/skills/",
+  "skills": "./skills/",
+  "agents": "./agents/",
+  "commands": "./commands/",
   "hooks": "./hooks/hooks.json"
 }

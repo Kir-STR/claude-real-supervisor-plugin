@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "real-supervisor",
-      "source": "./",
+      "source": "./plugins/real-supervisor",
       "description": "A powerful Claude Code plugin that orchestrates complex, multi-step projects through a structured, resumable workflow with specialized worker agents.",
       "version": "1.0.0",
       "author": {
