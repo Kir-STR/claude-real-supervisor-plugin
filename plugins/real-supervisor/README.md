@@ -17,11 +17,10 @@ The **Real Supervisor Plugin** provides a complete orchestration system for mana
 
 See [skills/real-supervisor/README.md](./skills/real-supervisor/README.md) for detailed skill documentation and usage guide.
 
-### Agents (7)
+### Agents (6)
 
 Specialized worker agents automatically discovered from the `agents/` directory:
 
-- **Explore** (`agents/explore.md`) - PRD analysis and requirements extraction
 - **Analyst** (`agents/analyst.md`) - Requirements analysis and specification generation
 - **Designer** (`agents/designer.md`) - UI/UX designs, architecture diagrams, system designs
 - **Implementer** (`agents/implementer.md`) - Code implementation and technical development
@@ -30,6 +29,8 @@ Specialized worker agents automatically discovered from the `agents/` directory:
 - **Tester** (`agents/tester.md`) - Test plan and test case generation
 
 Claude Code automatically selects the appropriate agent based on task characteristics.
+
+**Note:** The skill also utilizes Claude Code's built-in `Explore` and `Plan` agents for codebase exploration and planning tasks.
 
 ### Commands (2)
 

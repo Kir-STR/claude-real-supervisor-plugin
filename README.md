@@ -17,7 +17,7 @@ A powerful orchestration plugin that manages complex, multi-step projects throug
 
 **Components:**
 - 1 skill: `real-supervisor` (14-step workflow orchestration)
-- 7 agents: Explore, Analyst, Designer, Implementer, Writer, Critique, Tester
+- 6 custom agents: Analyst, Designer, Implementer, Writer, Critique, Tester
 - 2 commands: `/supervisor`, `/rs` (alias)
 - 3 hooks: SubagentStop, SessionStart, PostToolUse
 
