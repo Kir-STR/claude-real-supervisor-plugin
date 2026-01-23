@@ -23,7 +23,6 @@ Claude Code automatically delegates tasks to appropriate agents based on your ta
 ### 1. Built-in Agents (Claude Code)
 - **Explore**: Fast codebase exploration, file discovery, and code search (read-only)
 - **Plan**: Research and planning during plan mode (read-only)
-- **General-purpose**: Complex multi-step tasks requiring both exploration and modification
 
 ### 2. Predefined Agents (Plugin)
 Specialized agents defined in the `agents/` directory. Claude Code automatically discovers and selects these agents based on task characteristics.

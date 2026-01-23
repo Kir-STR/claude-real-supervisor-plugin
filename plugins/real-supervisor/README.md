@@ -18,13 +18,12 @@ The **Real Supervisor Plugin** implements the **Supervisor Pattern** - it acts a
 - **Spec-Driven Communication**: Structured, contract-based handoffs between agents ensure reliability
 - **Human-in-the-Loop**: Built-in approval gates at critical decision points (plan approval, draft review)
 - **Checkpointing**: Integration with Claude Code's `/rewind` for artifact versioning
-- **Specialized Agents**: Pre-defined agents (Analyst, Designer, Implementer, Writer, Tester, Critique)
 - **Command Alias**: Use the short `rs` command instead of typing `supervisor`
 
 ## Plugin Components
 
 - **1 skill**: `real-supervisor` - Orchestrates the 14-step workflow
-- **7 agents**: Explore, Analyst, Designer, Implementer, Writer, Critique, Tester
+- **7 agents**: Pre-defined ready to use agents team
 - **2 commands**: `/rs` (quick alias) and `/supervisor` (full name)
 - **3 hooks**:
   - `SubagentStop` - Logs agent outputs for audit trail
@@ -262,7 +261,6 @@ Follow the prompts to select which checkpoint to restore.
 
 The Real Supervisor uses specialized worker agents that are automatically discovered from the `agents/` directory:
 
-- **Explore** - PRD analysis and requirements extraction
 - **Analyst** - Requirements analysis and specification generation
 - **Designer** - UI/UX designs, architecture diagrams, system designs
 - **Implementer** - Code implementation
@@ -295,128 +293,7 @@ All outputs are organized in `.supervisor/`:
 
 ## Examples
 
-### Example 1: Building a REST API
-
-```bash
-# Create your PRD
-cat > api_prd.md << 'EOF'
-# Task Management REST API
-
-## Overview
-Build a RESTful API for task management with CRUD operations.
-
-## Requirements
-- User authentication with JWT
-- Task CRUD endpoints
-- Task filtering and search
-- PostgreSQL database
-
-## Deliverable
-Complete Node.js/Express application with API endpoints
-EOF
-
-# Run the supervisor
-rs api_prd.md
-```
-
-The supervisor will:
-1. Analyze requirements
-2. Create implementation plan
-3. Present plan for approval
-4. Generate detailed specification
-5. Create draft implementation
-6. Ask for your review
-7. Deliver final code
-
-### Example 2: Creating a System Design
-
-```bash
-# Create design PRD
-cat > design_prd.md << 'EOF'
-# E-Commerce Platform Architecture
-
-## Overview
-Design the system architecture for a scalable e-commerce platform.
-
-## Requirements
-- Microservices architecture
-- Handle 10,000 concurrent users
-- Support multiple payment gateways
-- Real-time inventory management
-
-## Deliverable
-Comprehensive architecture document with diagrams and component descriptions
-EOF
-
-# Run the supervisor
-rs design_prd.md
-```
-
-The supervisor will use the Designer agent to create architectural designs.
-
-### Example 3: Resuming After Interruption
-
-```bash
-# Original invocation (interrupted during draft creation)
-rs project_prd.md
-# ... session interrupted ...
-
-# Later, resume the session
-rs project_prd.md
-# Supervisor detects previous session and asks to resume
-# Select "Yes" to continue from where you left off
-```
-
-### Example 4: Sample PRD Template
-
-```markdown
-# Product Requirements Document: Task Management API
-
-## Overview
-We need to build a RESTful API for a task management system that allows
-users to create, read, update, and delete tasks. The API should support
-task categorization, priority levels, and due dates.
-
-## Objectives
-1. Provide a simple, intuitive API for task management
-2. Support multiple users with authentication
-3. Enable task organization through categories and priorities
-4. Allow filtering and searching of tasks
-
-## Functional Requirements
-
-### FR-1: Task CRUD Operations
-- Users must be able to create new tasks with title, description,
-  category, priority, and due date
-- Users must be able to read their own tasks (individual and list views)
-- Users must be able to update task properties
-- Users must be able to delete tasks they own
-
-### FR-2: User Authentication
-- Users must authenticate using JWT tokens
-- API must support user registration and login
-- Each user can only access their own tasks
-
-## Non-Functional Requirements
-
-### NFR-1: Performance
-- API response time: < 200ms for single task operations
-- API response time: < 500ms for list operations
-- Support at least 100 concurrent users
-
-### NFR-2: Security
-- All endpoints except registration/login require authentication
-- Passwords must be hashed using bcrypt
-- JWT tokens expire after 24 hours
-
-## Deliverable
-A complete Node.js/Express application with:
-- Source code organized in MVC structure
-- Database schema and models
-- API endpoints implementation
-- Basic documentation of endpoints
-- Instructions for local setup and running
-```
+Examples are available in `skills/real-supervisor/examples.md`
 
 ## Advanced Usage
 
@@ -478,10 +355,7 @@ The plugin provides a short `rs` alias for convenience. You can use either:
 
 ### Customizing Agents
 
-Edit `.claude/skills/real-supervisor/agents.md` to:
-- Add new specialized agents
-- Modify existing agent instructions
-- Change agent selection criteria
+You can modify the agent definitions in the `agents/` directory or add your own custom agents.
 
 ## Best Practices
 
@@ -518,42 +392,19 @@ After installation, the plugin structure is:
 
 ```
 real-supervisor/
-├── .claude/
-│   ├── settings.json                            # Project settings
-│   └── skills/
-│       └── real-supervisor/                     # The supervisor skill
-│           ├── SKILL.md                         # Core supervisor instructions
-│           ├── agents.md                        # Custom agent definitions
-│           └── examples/                        # Example files
-│               ├── example_prd.md
-│               ├── example_state.json
-│               ├── example_session_log.json
-│               ├── example_spec_schema.md
-│               └── workflow_diagram.md
 ├── .claude-plugin/
-│   ├── plugin.json                              # Plugin manifest
-│   └── marketplace.json                         # Marketplace metadata
+│   └── plugin.json                              # Plugin manifest
+├── agents/
 ├── commands/
 │   ├── supervisor.md                            # /supervisor command
 │   └── rs.md                                    # /rs command (alias)
-└── hooks/
-    ├── hooks.json                               # Plugin hooks configuration
-    └── README.md                                # Hooks documentation
+├── hooks/
+│   └── hooks.json                               # Plugin hooks configuration
+└── skills/
+    └── real-supervisor/                     # The supervisor skill
+        ├── examples.md
+        └── SKILL.md                         # Core supervisor instructions
 ```
-
-## Contributing
-
-Contributions are welcome! To extend the plugin:
-
-1. **Add custom agents**: Edit `.claude/skills/real-supervisor/agents.md`
-2. **Modify workflow**: Update `.claude/skills/real-supervisor/SKILL.md`
-3. **Enhance state tracking**: Add fields to the state schema
-4. **Create new schemas**: Add task-specific spec schemas
-
-Please submit pull requests with:
-- Clear description of changes
-- Test results showing workflow still functions
-- Updated documentation if needed
 
 ## License
 
@@ -564,15 +415,6 @@ MIT License - see LICENSE file for details.
 For issues, questions, or feature requests:
 - Open an issue on GitHub
 - Check existing issues for solutions
-- Review the documentation in `.claude/skills/real-supervisor/examples/`
-
-## Version
-
-Current version: 1.0.0
-
-## Acknowledgments
-
-Built on Claude Code's powerful agent orchestration capabilities. Inspired by the supervisor pattern in software architecture and the need for robust, resumable workflows in complex project execution.
 
 ---
 
@@ -582,4 +424,3 @@ Built on Claude Code's powerful agent orchestration capabilities. Inspired by th
 - Resume: Re-run same command after interruption
 - Checkpoints: Use `/rewind` to return to saved states
 - Output: Check `.supervisor/output/` for all generated files
-- Marketplace: See [MARKETPLACE.md](MARKETPLACE.md) for distribution details
