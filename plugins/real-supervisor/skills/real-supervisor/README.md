@@ -245,42 +245,179 @@ What you want to achieve
 What the final output should be (code, design, documentation, etc.)
 ```
 
-See `examples/example_prd.md` for a complete template.
+### Complete PRD Template
+
+```markdown
+# Product Requirements Document: [Project Name]
+
+## Overview
+We need to build [description]. The [system/application/deliverable] should [main purpose].
+
+## Objectives
+1. [Primary objective]
+2. [Secondary objective]
+3. [Additional objectives]
+
+## Functional Requirements
+
+### FR-1: [Feature Category]
+- [Specific requirement 1]
+- [Specific requirement 2]
+- [Specific requirement 3]
+
+### FR-2: [Feature Category]
+- [Specific requirement 1]
+- [Specific requirement 2]
+
+## Non-Functional Requirements
+
+### NFR-1: Performance
+- [Performance requirement with metrics]
+- [Response time requirements]
+- [Throughput requirements]
+
+### NFR-2: Security
+- [Security requirement 1]
+- [Security requirement 2]
+- [Authentication/authorization requirements]
+
+### NFR-3: Scalability
+- [Scalability requirements]
+- [Concurrent user support]
+
+## Technical Constraints (Optional)
+- Technology stack preferences
+- Platform requirements
+- Integration requirements
+
+## Deliverable
+A complete [type] with:
+- [Component 1]
+- [Component 2]
+- [Documentation requirements]
+- [Setup/deployment instructions]
+```
+
+See `examples.md` for complete PRD examples.
 
 ## Usage Examples
 
-### Example 1: Build a REST API
+### Example 1: Building a REST API
 
 ```bash
-/rs api_requirements.md
+# Create your PRD
+cat > api_prd.md << 'EOF'
+# Task Management REST API
+
+## Overview
+Build a RESTful API for task management with CRUD operations.
+
+## Requirements
+- User authentication with JWT
+- Task CRUD endpoints
+- Task filtering and search
+- PostgreSQL database
+
+## Deliverable
+Complete Node.js/Express application with API endpoints
+EOF
+
+# Run the supervisor
+/rs api_prd.md
 ```
 
 The supervisor will:
 1. Analyze API requirements
 2. Create implementation plan
-3. Get your approval
+3. Present plan for your approval
 4. Generate detailed specification
-5. Create checkpoint
-6. Implement draft API code
-7. Present draft for review
-8. Incorporate your feedback
-9. Deliver final API implementation
+5. Create initial checkpoint
+6. Implement draft API code (using Implementer agent)
+7. Present draft for your review
+8. Create draft checkpoint
+9. Incorporate your feedback
+10. Deliver final API implementation
 
-### Example 2: Design System Architecture
+### Example 2: Creating a System Design
 
 ```bash
-/supervisor architecture_prd.md
+# Create design PRD
+cat > design_prd.md << 'EOF'
+# E-Commerce Platform Architecture
+
+## Overview
+Design the system architecture for a scalable e-commerce platform.
+
+## Requirements
+- Microservices architecture
+- Handle 10,000 concurrent users
+- Support multiple payment gateways
+- Real-time inventory management
+
+## Deliverable
+Comprehensive architecture document with diagrams and component descriptions
+EOF
+
+# Run the supervisor
+/supervisor design_prd.md
 ```
 
 The supervisor selects the **Designer** agent to create comprehensive architecture documentation with diagrams.
 
-### Example 3: Resume Interrupted Session
+### Example 3: Generating Documentation
 
 ```bash
-/rs project_prd.md
+# Create documentation PRD
+cat > docs_prd.md << 'EOF'
+# API Documentation for Payment Service
+
+## Overview
+Create comprehensive API documentation for our payment processing service.
+
+## Requirements
+- Document all REST endpoints
+- Include request/response examples
+- Authentication and authorization guide
+- Error codes and handling
+- Rate limiting information
+
+## Deliverable
+Markdown documentation with code examples
+EOF
+
+/rs docs_prd.md
 ```
 
-If `.supervisor/state.json` exists, you'll be asked whether to resume or start fresh.
+The supervisor selects the **Writer** agent to create detailed technical documentation.
+
+### Example 4: Resuming After Interruption
+
+```bash
+# Original invocation (interrupted during draft creation)
+/rs project_prd.md
+# ... session interrupted ...
+
+# Later, resume the session
+/rs project_prd.md
+# Supervisor detects previous session and asks to resume
+# Select "Yes" to continue from where you left off
+```
+
+### Example 5: Using Checkpoints
+
+```bash
+# Run the workflow
+/rs implementation_prd.md
+# ... workflow completes through draft review ...
+# You approve the draft
+# ... final version is created ...
+
+# Later, you want to provide different feedback
+/rewind
+# Select the "Draft Checkpoint" to return
+# Provide new feedback
+# Get a different final version
+```
 
 ## Error Handling
 
@@ -290,13 +427,122 @@ If any step fails:
 3. You are notified of the failure
 4. Options: Retry step, Modify inputs, or Cancel
 
+## Advanced Usage
+
+### Modifying the Specification Schema
+
+If the default schema doesn't fit your needs, you can provide a custom schema:
+
+1. Create your own `custom_schema.md`
+2. Reference it in your PRD under a "Specification Schema" section
+3. The supervisor will use your custom schema instead
+
+### Providing Early Feedback
+
+At the plan approval stage (Step 7), you can:
+- **Approve** the plan as-is to proceed
+- **Request specific changes** to the plan
+- **Cancel** if the approach isn't suitable
+
+This ensures you're aligned with the approach before implementation begins.
+
+### Iterating on Drafts
+
+At the draft review stage (Step 11), you can:
+- **Approve** the draft and proceed to final version
+- **Provide detailed feedback** for improvements
+- **Reject** the draft and request a complete redo
+
+Your feedback is saved to `feedback.md` and incorporated into the final version.
+
+### Working with Large Projects
+
+For complex projects:
+1. Break the PRD into phases if needed
+2. Use checkpoints to iterate on specific parts
+3. Review `session_log.json` to understand agent decisions
+4. Use `/rewind` to try different approaches
+
+## Troubleshooting
+
+### Issue: "No PRD file found at path"
+
+**Solution**: Ensure the PRD file path is correct and the file exists.
+
+```bash
+# Check if file exists
+ls path/to/prd.md
+
+# Use absolute path if needed
+/rs /full/path/to/prd.md
+```
+
+### Issue: Agent fails during execution
+
+**Solution**: The supervisor will log the error and ask if you want to retry, modify inputs, or cancel. Check the session log for details:
+
+```bash
+# View session log
+cat .supervisor/session_log.json
+
+# Look for entries with "status": "failed"
+```
+
+### Issue: Can't resume previous session
+
+**Solution**: Ensure `.supervisor/state.json` exists. If corrupted:
+
+```bash
+# Check if state file exists
+ls .supervisor/state.json
+
+# If corrupted, delete and start fresh
+rm -rf .supervisor/
+/rs path/to/prd.md
+```
+
+### Issue: Final deliverable doesn't match expectations
+
+**Solution**: Use `/rewind` to return to the draft checkpoint, provide more detailed feedback, and regenerate the final version.
+
+```bash
+# Rewind to draft checkpoint
+/rewind
+# Select "Draft Checkpoint"
+# Workflow resumes at draft review (Step 11)
+# Provide detailed, specific feedback
+# Final version regenerated with new feedback
+```
+
+### Issue: Workflow stuck at approval gate
+
+**Solution**: The supervisor is waiting for your input. Respond to the approval prompt to continue.
+
+### Issue: State file shows wrong step
+
+**Solution**: The state file may be corrupted. You can either:
+1. Delete `.supervisor/` and start fresh
+2. Manually edit `.supervisor/state.json` to correct the step (advanced)
+
 ## Best Practices
 
 1. **Write detailed PRDs** - Better requirements lead to better results
-2. **Review plans carefully** at HIL Gate 1
-3. **Provide specific feedback** during draft review
-4. **Use `/rewind`** if you need to go back to a checkpoint
-5. **Check `session_log.json`** for complete audit trail
+2. **Review plans carefully** at HIL Gate 1 - This is your chance to shape the approach
+3. **Provide specific feedback** during draft review - Be explicit about what needs to change
+4. **Use `/rewind`** liberally - Don't hesitate to go back to checkpoints
+5. **Check `session_log.json`** for complete audit trail of all agent activity
+6. **Organize PRDs** in a dedicated directory for easy management
+7. **Be specific in deliverable requirements** - Clearly state what format and content you expect
+
+## Limitations
+
+The supervisor explicitly avoids work not required by the PRD:
+- Won't create extensive documentation beyond specifications unless requested
+- Won't perform complex analytics unless specified in PRD
+- Won't create deployment pipelines or CI/CD unless included in deliverable requirements
+- Won't create automated test suites unless explicitly required in PRD
+
+**Focus**: Core task execution from PRD to deliverable as specified.
 
 ## Components
 
@@ -306,14 +552,27 @@ The Real Supervisor skill consists of:
 - **examples.md** - Usage examples, common patterns, and structure examples
 - **README.md** - This file (skill documentation for users)
 
-Worker agents are defined in `../../agents/` directory (6 specialized agents).
+Worker agents are defined in `../../agents/` directory (7 specialized agents).
 
 ## Architecture
 
 The supervisor implements these principles:
 
-1. **File-Based Operations** - All inputs/outputs are files for transparency
-2. **Supervisor Pattern** - Decompose, delegate, aggregate
-3. **Spec-Driven Communication** - Structured schemas for agent handoffs
-4. **State Persistence** - Resume after interruptions
-5. **Human-in-the-Loop** - User approval at critical decision points
+1. **File-Based Operations** - All inputs/outputs are files for transparency and version control
+2. **Supervisor Pattern** - Decompose complex tasks, delegate to specialists, aggregate results
+3. **Spec-Driven Communication** - Structured schemas ensure reliable agent handoffs
+4. **State Persistence** - Robust state management enables resumption after interruptions
+5. **Human-in-the-Loop** - User approval at critical decision points (plan approval, draft review)
+6. **Checkpointing** - Integration with `/rewind` for safe rollback to known states
+
+## Related Documentation
+
+- **Plugin README** - [../../README.md](../../README.md) - Plugin components and installation
+- **Examples** - [examples.md](./examples.md) - Detailed usage patterns and structure examples
+- **Skill Instructions** - SKILL.md - Instructions for Claude Code (internal)
+
+## Version
+
+Skill version: 1.0.0
+
+Part of Real Supervisor Plugin v1.0.0
