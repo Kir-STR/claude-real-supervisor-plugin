@@ -10,40 +10,35 @@ The supervisor implements a **supervisor-worker pattern** where:
 
 ## Workflow
 
-The supervisor executes a **14-step workflow** across **10 phases**:
+The supervisor executes a **14-step workflow** across **4 phases**:
 
-### Phase 0: Initialization (Steps 1-2)
-Checks for existing session state and initializes or resumes the session.
+### Phase 1: Initialization (Steps 1-2)
+**Purpose**: Check for existing session and initialize or resume
 
-### Phase 1: Explore (Step 3)
-Analyzes the PRD using the Explore agent, producing an exploration report.
+- Checks for existing session state
+- Initializes new session or resumes interrupted session
 
-### Phase 2: Plan (Steps 4-5)
-Creates an execution plan and defines a specification schema for structured communication.
+### Phase 2: Planning & Specification (Steps 3-9)
+**Purpose**: Analyze requirements, create execution plan, and generate detailed specification
 
-### Phase 3: Critique & Approval (Steps 6-7)
-Reviews the plan with a Critique agent, then presents it to you for approval (**HIL Gate 1**).
+- Step 3: Explore PRD and extract requirements
+- Steps 4-5: Create execution plan and specification schema
+- Steps 6-7: Critique plan and get user approval (**HIL Gate 1**)
+- Step 8: Generate detailed specification conforming to schema
+- Step 9: Create initial checkpoint (use `/rewind` to return here)
 
-### Phase 4: Execute Specification (Step 8)
-The Analyst agent generates a detailed specification conforming to the schema.
+### Phase 3: Draft Creation & Review (Steps 10-12)
+**Purpose**: Create draft deliverable, collect user feedback, and checkpoint
 
-### Phase 5: Checkpoint Initial (Step 9)
-Creates the first checkpoint - you can `/rewind` to this point later.
+- Step 10: Create draft deliverable using specialized worker agent (Designer/Implementer/Writer)
+- Step 11: Present draft for user review and feedback (**HIL Gate 2**)
+- Step 12: Create draft checkpoint before final execution
 
-### Phase 6: Execute Draft (Step 10)
-A specialized worker agent (Designer/Implementer/Writer) creates a draft deliverable.
+### Phase 4: Final Delivery (Steps 13-14)
+**Purpose**: Create final deliverable and complete workflow
 
-### Phase 7: Review Draft (Step 11)
-Presents the draft to you for review and feedback (**HIL Gate 2**).
-
-### Phase 8: Checkpoint Draft (Step 12)
-Creates the second checkpoint before final execution.
-
-### Phase 9: Execute Final (Step 13)
-Incorporates your feedback to produce the final deliverable.
-
-### Phase 10: Completion (Step 14)
-Archives the session and presents all deliverables.
+- Step 13: Create final deliverable incorporating user feedback
+- Step 14: Archive session and present all deliverables
 
 ## Worker Agents
 
@@ -61,72 +56,48 @@ The supervisor selects the appropriate agent based on deliverable type.
 ## Workflow Diagram
 
 ```
-┌─────────────────────────────────────────┐
-│  USER: /rs path/to/prd.md               │
-└──────────────────┬──────────────────────┘
-                   ▼
-┌─────────────────────────────────────────┐
-│  PHASE 0: Initialization (Steps 1-2)   │
-│  Check state → Resume or Start Fresh    │
-└──────────────────┬──────────────────────┘
-                   ▼
-┌─────────────────────────────────────────┐
-│  PHASE 1: Explore (Step 3)              │
-│  Explore agent → exploration_report.md  │
-└──────────────────┬──────────────────────┘
-                   ▼
-┌─────────────────────────────────────────┐
-│  PHASE 2: Plan (Steps 4-5)              │
-│  Create plan.md & spec_schema.md        │
-└──────────────────┬──────────────────────┘
-                   ▼
-┌─────────────────────────────────────────┐
-│  PHASE 3: Critique & Approval (6-7)     │
-│  Critique → plan_critique.md            │
-│  HIL: User approves plan ◄──┐           │
-│           └─ Changes? ───────┘           │
-└──────────────────┬──────────────────────┘
-                   ▼
-┌─────────────────────────────────────────┐
-│  PHASE 4: Execute Spec (Step 8)         │
-│  task_spec.md (follows schema)          │
-└──────────────────┬──────────────────────┘
-                   ▼
-┌─────────────────────────────────────────┐
-│  PHASE 5: Checkpoint Initial (Step 9)   │
-│  Create checkpoint (can /rewind here)   │
-└──────────────────┬──────────────────────┘
-                   ▼
-┌─────────────────────────────────────────┐
-│  PHASE 6: Execute Draft (Step 10)       │
-│  Worker agent → draft_[type].[ext]      │
-└──────────────────┬──────────────────────┘
-                   ▼
-┌─────────────────────────────────────────┐
-│  PHASE 7: Review Draft (Step 11)        │
-│  HIL: User reviews ◄──┐                 │
-│       └─ Feedback? → feedback.md        │
-└──────────────────┬──────────────────────┘
-                   ▼
-┌─────────────────────────────────────────┐
-│  PHASE 8: Checkpoint Draft (Step 12)    │
-│  Create checkpoint (can /rewind here)   │
-└──────────────────┬──────────────────────┘
-                   ▼
-┌─────────────────────────────────────────┐
-│  PHASE 9: Execute Final (Step 13)       │
-│  Worker agent → final_[type].[ext]      │
-│  (incorporates feedback)                │
-└──────────────────┬──────────────────────┘
-                   ▼
-┌─────────────────────────────────────────┐
-│  PHASE 10: Completion (Step 14)         │
-│  Archive & present deliverables         │
-└──────────────────┬──────────────────────┘
-                   ▼
-               ┌─────────┐
-               │ SUCCESS │
-               └─────────┘
+┌──────────────────────────────────────────────┐
+│  USER: /rs path/to/prd.md                    │
+└────────────────────┬─────────────────────────┘
+                     ▼
+┌──────────────────────────────────────────────┐
+│  PHASE 1: Initialization (Steps 1-2)        │
+│  Check state → Resume or Start Fresh         │
+└────────────────────┬─────────────────────────┘
+                     ▼
+┌──────────────────────────────────────────────┐
+│  PHASE 2: Planning & Specification (3-9)    │
+│                                              │
+│  Step 3:  Explore PRD → exploration_report  │
+│  Step 4:  Create plan.md                    │
+│  Step 5:  Define spec_schema.md             │
+│  Step 6:  Critique → plan_critique.md       │
+│  Step 7:  HIL Gate 1: User approves plan ◄┐ │
+│                └─ Changes? ─────────────────┘ │
+│  Step 8:  Generate task_spec.md            │
+│  Step 9:  Checkpoint (can /rewind here)    │
+└────────────────────┬─────────────────────────┘
+                     ▼
+┌──────────────────────────────────────────────┐
+│  PHASE 3: Draft Creation & Review (10-12)  │
+│                                              │
+│  Step 10: Create draft_[type].[ext]        │
+│  Step 11: HIL Gate 2: User reviews ◄──┐    │
+│                └─ Feedback? → feedback.md   │
+│  Step 12: Checkpoint (can /rewind here)    │
+└────────────────────┬─────────────────────────┘
+                     ▼
+┌──────────────────────────────────────────────┐
+│  PHASE 4: Final Delivery (13-14)            │
+│                                              │
+│  Step 13: Create final_[type].[ext]        │
+│           (incorporates feedback)            │
+│  Step 14: Archive & present deliverables   │
+└────────────────────┬─────────────────────────┘
+                     ▼
+                ┌─────────┐
+                │ SUCCESS │
+                └─────────┘
 ```
 
 ## State Management
