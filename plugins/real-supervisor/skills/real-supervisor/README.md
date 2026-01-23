@@ -10,47 +10,37 @@ The supervisor implements a **supervisor-worker pattern** where:
 
 ## Workflow
 
-The supervisor executes a **14-step workflow** across **4 phases**:
+The supervisor executes a **14-step workflow** across **4 phases** with two human-in-the-loop (HIL) approval gates:
 
-### Phase 1: Initialization (Steps 1-2)
-**Purpose**: Check for existing session and initialize or resume
+### Phase 1: Initialization
+Check for existing session and initialize or resume workflow.
 
-- Checks for existing session state
-- Initializes new session or resumes interrupted session
+### Phase 2: Planning & Specification
+Analyze PRD, create execution plan, generate specification schema, critique and iterate until plan approval (**HIL Gate 1**), then generate detailed specification and create initial checkpoint.
 
-### Phase 2: Planning & Specification (Steps 3-9)
-**Purpose**: Analyze requirements, create execution plan, and generate detailed specification
+### Phase 3: Draft Creation & Review
+Create draft deliverable, collect user feedback (**HIL Gate 2**), and create draft checkpoint.
 
-- Step 3: Explore PRD and extract requirements
-- Steps 4-5: Create execution plan and specification schema
-- Steps 6-7: Critique plan and get user approval (**HIL Gate 1**)
-- Step 8: Generate detailed specification conforming to schema
-- Step 9: Create initial checkpoint (use `/rewind` to return here)
+### Phase 4: Final Delivery
+Create final deliverable incorporating feedback and archive session.
 
-### Phase 3: Draft Creation & Review (Steps 10-12)
-**Purpose**: Create draft deliverable, collect user feedback, and checkpoint
-
-- Step 10: Create draft deliverable using specialized worker agent (Designer/Implementer/Writer)
-- Step 11: Present draft for user review and feedback (**HIL Gate 2**)
-- Step 12: Create draft checkpoint before final execution
-
-### Phase 4: Final Delivery (Steps 13-14)
-**Purpose**: Create final deliverable and complete workflow
-
-- Step 13: Create final deliverable incorporating user feedback
-- Step 14: Archive session and present all deliverables
+**Note:** For detailed step-by-step implementation instructions, see SKILL.md.
 
 ## Worker Agents
 
-The supervisor delegates to **7 specialized agents**:
+The supervisor delegates tasks to **6 custom agents** plus built-in Claude Code agents:
 
-1. **Explore** - PRD analysis and requirements extraction (built-in Claude Code agent)
-2. **Analyst** - Requirements analysis and specification generation
-3. **Designer** - UI/UX designs, architecture diagrams, system design
-4. **Implementer** - Code implementation and technical development
-5. **Writer** - Documentation, technical writing, content creation
-6. **Critique** - Critical review and constructive feedback
-7. **Tester** - Testing strategies, test cases, quality assurance
+**Custom Agents:**
+- **Analyst** - Requirements analysis and specification generation
+- **Designer** - UI/UX designs, architecture diagrams, system design
+- **Implementer** - Code implementation and technical development
+- **Writer** - Documentation, technical writing, content creation
+- **Critique** - Critical review and constructive feedback
+- **Tester** - Testing strategies, test cases, quality assurance
+
+**Built-in Agents:**
+- **Explore** - PRD analysis and requirements extraction
+- **Plan** - Planning and task breakdown
 
 The supervisor selects the appropriate agent based on deliverable type and task description.
 
