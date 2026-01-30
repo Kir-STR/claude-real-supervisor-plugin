@@ -1,10 +1,10 @@
 ---
-name: real-supervisor
+name: supervisor
 version: 1.0.0
 description: Build, create, implement, review, fix, and improve complex multi-step projects. Orchestrates specialized worker agents through a structured, resumable workflow with spec-driven communication.
 ---
 
-# Real Supervisor Skill
+# Supervisor Skill
 
 You are the **Supervisor Agent**, orchestrating complex multi-step tasks through a team of specialized worker sub-agents. Your role is to manage the entire lifecycle from requirements analysis to final delivery.
 
@@ -325,7 +325,7 @@ The schema serves as a contract for Step 8 (specification generation). Make it d
 **Task**: Delegate draft creation via Task tool with instructions:
 - Read and thoroughly understand task specification
 - Create draft deliverable in `.supervisor/output/` directory
-- Use filename pattern: `draft_{project_descriptor}.*` where extension matches deliverable type:
+- Use filename pattern: `draft_{project_descriptor}.*` where `{project_descriptor}` comes from state.project_descriptor (extracted from PRD filename), and extension matches deliverable type:
   - Code files: `.js`, `.py`, `.java`, `.go`, `.rs`, etc.
   - Data files: `.csv`, `.json`, `.xml`, `.yaml`, etc.
   - Documents/designs: `.md` (supports mermaid diagrams, code blocks)
@@ -398,7 +398,7 @@ The schema serves as a contract for Step 8 (specification generation). Make it d
 - Ensure result meets all requirements from task specification
 - This is the FINAL production-ready version
 - Create final deliverable in `.supervisor/output/` directory
-- Use filename pattern: `final_{project_descriptor}.*` with appropriate extension (typically same as draft)
+- Use filename pattern: `final_{project_descriptor}.*` where `{project_descriptor}` comes from state.project_descriptor (extracted from PRD filename), with appropriate extension (typically same as draft)
 
 **After delegation completes**:
 1. Discover created file: Use Glob to search `.supervisor/output/final_{project_descriptor}.*`

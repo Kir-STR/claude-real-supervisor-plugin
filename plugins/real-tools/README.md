@@ -1,27 +1,26 @@
-# Real Supervisor Plugin
+# Real Tools Plugin
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/Kir-STR/claude-real-tools/releases)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/Kir-STR/real-tools-marketplace/releases)
 
 A Claude Code plugin that orchestrates complex, multi-step projects through structured, resumable workflows with specialized worker agents.
 
 ## Overview
 
-The **Real Supervisor Plugin** provides a complete orchestration system for managing complex project workflows. The plugin consists of multiple components that work together: a skill that defines the orchestration workflow, specialized worker agents, commands for invocation, and hooks for workflow integration.
+The **Real Tools Plugin** provides a complete orchestration system for managing complex project workflows. The plugin consists of multiple components that work together: a skill that defines the orchestration workflow, specialized worker agents, commands for invocation, and hooks for workflow integration.
 
 ## Plugin Components
 
 ### Skills (1)
 
-- **real-supervisor** - Orchestrates a 14-step workflow across 4 phases with state management, checkpointing, and human-in-the-loop approval gates
+- **supervisor** - Orchestrates a 14-step workflow across 4 phases with state management, checkpointing, and human-in-the-loop approval gates
 
-See [skills/real-supervisor/README.md](./skills/real-supervisor/README.md) for detailed skill documentation and usage guide.
+See [skills/supervisor/README.md](./skills/supervisor/README.md) for detailed skill documentation and usage guide.
 
-### Agents (7)
+### Agents (6)
 
 Specialized worker agents automatically discovered from the `agents/` directory:
 
-- **Explore** (`agents/explore.md`) - PRD analysis and requirements extraction
 - **Analyst** (`agents/analyst.md`) - Requirements analysis and specification generation
 - **Designer** (`agents/designer.md`) - UI/UX designs, architecture diagrams, system designs
 - **Implementer** (`agents/implementer.md`) - Code implementation and technical development
@@ -31,12 +30,11 @@ Specialized worker agents automatically discovered from the `agents/` directory:
 
 Claude Code automatically selects the appropriate agent based on task characteristics.
 
+**Note:** The skill also utilizes Claude Code's built-in `Explore` and `Plan` agents for codebase exploration and planning tasks.
+
 ### Commands (2)
 
-- **`/supervisor <prd_path>`** - Full command name to invoke the Real Supervisor skill
-- **`/rs <prd_path>`** - Short alias for quick invocation
-
-Both commands invoke the same skill with identical behavior.
+- **`/real-tools:supervisor <prd_path>`** - Full command name to invoke the supervisor skill
 
 ### Hooks (3)
 
@@ -58,27 +56,27 @@ See the [marketplace README](../../README.md#installation) for installation via 
 
 ```bash
 # Clone the marketplace repository
-git clone https://github.com/Kir-STR/claude-real-tools.git
+git clone https://github.com/Kir-STR/real-tools-marketplace.git
 
 # Create symlink to plugins directory
 # Linux/Mac
-ln -s $(pwd)/claude-real-tools/plugins/real-supervisor ~/.config/claude-code/plugins/real-supervisor
+ln -s $(pwd)/real-tools-marketplace/plugins/real-tools ~/.config/claude-code/plugins/real-tools
 
 # Windows (PowerShell, as Administrator)
-New-Item -ItemType SymbolicLink -Path "$env:APPDATA\claude-code\plugins\real-supervisor" -Target "$(Get-Location)\claude-real-tools\plugins\real-supervisor"
+New-Item -ItemType SymbolicLink -Path "$env:APPDATA\claude-code\plugins\real-tools" -Target "$(Get-Location)\real-tools-marketplace\plugins\real-tools"
 ```
 
 #### Manual Copy
 
 ```bash
 # Clone and copy
-git clone https://github.com/Kir-STR/claude-real-tools.git
+git clone https://github.com/Kir-STR/real-tools-marketplace.git
 
 # Linux/Mac
-cp -r claude-real-tools/plugins/real-supervisor ~/.config/claude-code/plugins/real-supervisor
+cp -r real-tools-marketplace/plugins/real-tools ~/.config/claude-code/plugins/real-tools
 
 # Windows (PowerShell)
-Copy-Item -Recurse claude-real-tools\plugins\real-supervisor "$env:APPDATA\claude-code\plugins\real-supervisor"
+Copy-Item -Recurse real-tools-marketplace\plugins\real-tools "$env:APPDATA\claude-code\plugins\real-tools"
 ```
 
 ### Post-Installation
@@ -93,19 +91,16 @@ Copy-Item -Recurse claude-real-tools\plugins\real-supervisor "$env:APPDATA\claud
 
 ## Quick Start
 
-The Real Supervisor skill orchestrates project execution from PRD to final deliverable. For detailed usage, workflow phases, and examples, see the [skill documentation](./skills/real-supervisor/README.md).
+The Supervisor skill orchestrates project execution from PRD to final deliverable. For detailed usage, workflow phases, and examples, see the [skill documentation](./skills/supervisor/README.md).
 
 ### Basic Usage
 
 ```bash
 # Create a PRD (Product Requirements Document)
-# See skills/real-supervisor/README.md for PRD structure
+# See skills/supervisor/README.md for PRD structure
 
 # Invoke the supervisor
-/rs path/to/your_prd.md
-
-# Or use the full command
-/supervisor path/to/your_prd.md
+/real-tools:supervisor path/to/your_prd.md
 ```
 
 The skill will guide you through the complete workflow with approval gates and checkpoints.
@@ -117,12 +112,12 @@ For the full repository structure, see the [marketplace README](../../README.md#
 This plugin is organized as:
 
 ```
-real-supervisor/
+supervisor/
 ├── .claude-plugin/plugin.json    # Plugin manifest
 ├── agents/                        # 7 worker agent definitions
-├── commands/                      # /supervisor and /rs commands
+├── commands/                      # /supervisor command
 ├── hooks/                         # Workflow integration hooks
-├── skills/real-supervisor/        # Orchestration skill
+├── skills/supervisor/        # Orchestration skill
 └── README.md                      # This file
 ```
 
@@ -153,7 +148,7 @@ Hooks are configured in `hooks/hooks.json`. The plugin uses three hooks:
 - **SessionStart**: Triggered on Claude Code startup, checks for interrupted supervisor sessions
 - **PostToolUse**: Triggered after tool usage, validates state file integrity
 
-See `hooks/README.md` for detailed hook documentation.
+Hook configuration: `hooks/hooks.json`
 
 ## Output Files
 
@@ -177,9 +172,51 @@ The skill creates all outputs in `.supervisor/`:
 ## Documentation
 
 - **Plugin README** (this file) - Plugin components and installation
-- **Skill Guide** - [skills/real-supervisor/README.md](./skills/real-supervisor/README.md)
-- **Usage Examples** - [skills/real-supervisor/examples.md](./skills/real-supervisor/examples.md)
-- **Hook Documentation** - [hooks/README.md](./hooks/README.md)
+- **Skill Guide** - [skills/supervisor/README.md](./skills/supervisor/README.md)
+- **Usage Examples** - [skills/supervisor/examples.md](./skills/supervisor/examples.md)
+- **Hook Configuration** - [hooks/hooks.json](./hooks/hooks.json)
+
+## Edge Cases
+
+### PRD Modified Between Sessions
+
+If you modify the PRD file after starting a session:
+- The supervisor will use the original PRD path from state.json
+- To use the modified PRD, either:
+  - Start a fresh session (decline resumption)
+  - Or manually update `prd_path` in state.json before resuming
+
+### State File Corrupted
+
+If `.supervisor/state.json` is corrupted or invalid:
+- Delete `.supervisor/state.json`
+- Re-run the command to start fresh
+- Previous outputs in `.supervisor/output/` will be preserved
+
+### Output Files Manually Deleted
+
+If you delete files from `.supervisor/output/`:
+- The supervisor will detect missing files during resumption
+- You will be prompted to either:
+  - Restart from the step that produces the missing file
+  - Or start a fresh session
+
+### Multiple PRDs in Same Directory
+
+To work on multiple projects in the same directory:
+- Complete or cancel the current session first
+- Archive `.supervisor/` directory:
+  ```bash
+  mv .supervisor .supervisor_project1
+  ```
+- Start new session for the second PRD
+
+### Session Interrupted During HIL Gate
+
+If interrupted while waiting for user input:
+- Re-run the command
+- The supervisor will resume at the same HIL gate
+- You will be prompted again for approval/feedback
 
 ## Edge Cases
 
@@ -233,7 +270,7 @@ If interrupted while waiting for user input:
 
 ### Commands Not Working
 
-Ensure the plugin is properly installed and loaded (`/plugins` should list `real-supervisor`).
+Ensure the plugin is properly installed and loaded (`/plugins` should list `supervisor`).
 
 ### Hook Issues
 
@@ -242,7 +279,7 @@ If hooks aren't working:
 2. Verify hook paths are correct relative to plugin directory
 3. Restart Claude Code after modifying hooks
 
-For skill-specific issues (workflow, state, agents), see [skills/real-supervisor/README.md](./skills/real-supervisor/README.md).
+For skill-specific issues (workflow, state, agents), see [skills/supervisor/README.md](./skills/supervisor/README.md).
 
 ## Version
 
@@ -255,21 +292,21 @@ MIT License - see [LICENSE](../../LICENSE) file for details.
 ## Support
 
 For issues, questions, or feature requests:
-- Open an issue on [GitHub](https://github.com/Kir-STR/claude-real-tools/issues)
+- Open an issue on [GitHub](https://github.com/Kir-STR/real-tools-marketplace/issues)
 - Check existing issues for solutions
-- Review skill documentation: [skills/real-supervisor/README.md](./skills/real-supervisor/README.md)
+- Review skill documentation: [skills/supervisor/README.md](./skills/supervisor/README.md)
 
 ## Author
 
 **Kirill Bogdanov**
 
-Plugin: `real-supervisor`
-Marketplace: `real-tools`
+Plugin: `real-tools`
+Marketplace: `real-tools-marketplace`
 
 ---
 
 **Quick Reference:**
-- Install: `/plugin marketplace add Kir-STR/claude-real-tools` → `/plugin install real-supervisor@real-tools`
-- Usage: `/rs path/to/prd.md` or `/supervisor path/to/prd.md`
-- Skill docs: [skills/real-supervisor/README.md](./skills/real-supervisor/README.md)
-- Examples: [skills/real-supervisor/examples.md](./skills/real-supervisor/examples.md)
+- Install: `/plugin marketplace add Kir-STR/real-tools-marketplace` → `/plugin install supervisor@real-tools`
+- Usage: `/real-tools:supervisor path/to/prd.md` or `/supervisor path/to/prd.md`
+- Skill docs: [skills/supervisor/README.md](./skills/supervisor/README.md)
+- Examples: [skills/supervisor/examples.md](./skills/supervisor/examples.md)

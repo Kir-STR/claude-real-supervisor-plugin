@@ -1,6 +1,6 @@
-# Real Supervisor Skill
+# Supervisor Skill
 
-The Real Supervisor orchestrates complex, multi-step projects through a structured, resumable workflow with specialized worker agents.
+The Supervisor orchestrates complex, multi-step projects through a structured, resumable workflow with specialized worker agents.
 
 ## Overview
 
@@ -10,47 +10,37 @@ The supervisor implements a **supervisor-worker pattern** where:
 
 ## Workflow
 
-The supervisor executes a **14-step workflow** across **4 phases**:
+The supervisor executes a **14-step workflow** across **4 phases** with two human-in-the-loop (HIL) approval gates:
 
-### Phase 1: Initialization (Steps 1-2)
-**Purpose**: Check for existing session and initialize or resume
+### Phase 1: Initialization
+Check for existing session and initialize or resume workflow.
 
-- Checks for existing session state
-- Initializes new session or resumes interrupted session
+### Phase 2: Planning & Specification
+Analyze PRD, create execution plan, generate specification schema, critique and iterate until plan approval (**HIL Gate 1**), then generate detailed specification and create initial checkpoint.
 
-### Phase 2: Planning & Specification (Steps 3-9)
-**Purpose**: Analyze requirements, create execution plan, and generate detailed specification
+### Phase 3: Draft Creation & Review
+Create draft deliverable, collect user feedback (**HIL Gate 2**), and create draft checkpoint.
 
-- Step 3: Explore PRD and extract requirements
-- Steps 4-5: Create execution plan and specification schema
-- Steps 6-7: Critique plan and get user approval (**HIL Gate 1**)
-- Step 8: Generate detailed specification conforming to schema
-- Step 9: Create initial checkpoint (use `/rewind` to return here)
+### Phase 4: Final Delivery
+Create final deliverable incorporating feedback and archive session.
 
-### Phase 3: Draft Creation & Review (Steps 10-12)
-**Purpose**: Create draft deliverable, collect user feedback, and checkpoint
-
-- Step 10: Create draft deliverable using specialized worker agent (Designer/Implementer/Writer)
-- Step 11: Present draft for user review and feedback (**HIL Gate 2**)
-- Step 12: Create draft checkpoint before final execution
-
-### Phase 4: Final Delivery (Steps 13-14)
-**Purpose**: Create final deliverable and complete workflow
-
-- Step 13: Create final deliverable incorporating user feedback
-- Step 14: Archive session and present all deliverables
+**Note:** For detailed step-by-step implementation instructions, see SKILL.md.
 
 ## Worker Agents
 
-The supervisor delegates to **7 specialized agents**:
+The supervisor delegates tasks to **6 custom agents** plus built-in Claude Code agents:
 
-1. **Explore** - PRD analysis and requirements extraction (built-in Claude Code agent)
-2. **Analyst** - Requirements analysis and specification generation
-3. **Designer** - UI/UX designs, architecture diagrams, system design
-4. **Implementer** - Code implementation and technical development
-5. **Writer** - Documentation, technical writing, content creation
-6. **Critique** - Critical review and constructive feedback
-7. **Tester** - Testing strategies, test cases, quality assurance
+**Custom Agents:**
+- **Analyst** - Requirements analysis and specification generation
+- **Designer** - UI/UX designs, architecture diagrams, system design
+- **Implementer** - Code implementation and technical development
+- **Writer** - Documentation, technical writing, content creation
+- **Critique** - Critical review and constructive feedback
+- **Tester** - Testing strategies, test cases, quality assurance
+
+**Built-in Agents:**
+- **Explore** - PRD analysis and requirements extraction
+- **Plan** - Planning and task breakdown
 
 The supervisor selects the appropriate agent based on deliverable type and task description.
 
@@ -58,7 +48,7 @@ The supervisor selects the appropriate agent based on deliverable type and task 
 
 ```
 ┌──────────────────────────────────────────────┐
-│  USER: /rs path/to/prd.md                    │
+│  USER: /real-tools:supervisor path/to/prd.md                    │
 └────────────────────┬─────────────────────────┘
                      ▼
 ┌──────────────────────────────────────────────┐
@@ -146,12 +136,22 @@ All session state is stored in `.supervisor/`:
 }
 ```
 
+### Output Naming Convention
+
+Output filenames are derived from your PRD filename by stripping the path and extension:
+
+- `api_requirements.md` → `draft_api.*`, `final_api.*`
+- `system_design.md` → `draft_system_design.*`, `final_system_design.*`
+- `docs/user_guide.md` → `draft_user_guide.*`, `final_user_guide.*`
+
+The file extension (`.js`, `.py`, `.md`, etc.) is determined by the deliverable type specified in your PRD.
+
 ## Resumption
 
 If a session is interrupted, simply re-run the command:
 
 ```bash
-/rs path/to/prd.md
+/real-tools:supervisor path/to/prd.md
 ```
 
 The supervisor:
@@ -192,204 +192,11 @@ Two checkpoints enable safe rollback via `/rewind`:
 
 ## PRD Requirements
 
-Your PRD should include:
-
-```markdown
-# Project Title
-
-## Overview
-Brief project description
-
-## Objectives
-What you want to achieve
-
-## Functional Requirements
-- Requirement 1
-- Requirement 2
-- ...
-
-## Non-Functional Requirements (Optional)
-- Performance requirements
-- Security requirements
-- ...
-
-## Deliverable
-What the final output should be (code, design, documentation, etc.)
-```
-
-### Complete PRD Template
-
-```markdown
-# Product Requirements Document: [Project Name]
-
-## Overview
-We need to build [description]. The [system/application/deliverable] should [main purpose].
-
-## Objectives
-1. [Primary objective]
-2. [Secondary objective]
-3. [Additional objectives]
-
-## Functional Requirements
-
-### FR-1: [Feature Category]
-- [Specific requirement 1]
-- [Specific requirement 2]
-- [Specific requirement 3]
-
-### FR-2: [Feature Category]
-- [Specific requirement 1]
-- [Specific requirement 2]
-
-## Non-Functional Requirements
-
-### NFR-1: Performance
-- [Performance requirement with metrics]
-- [Response time requirements]
-- [Throughput requirements]
-
-### NFR-2: Security
-- [Security requirement 1]
-- [Security requirement 2]
-- [Authentication/authorization requirements]
-
-### NFR-3: Scalability
-- [Scalability requirements]
-- [Concurrent user support]
-
-## Technical Constraints (Optional)
-- Technology stack preferences
-- Platform requirements
-- Integration requirements
-
-## Deliverable
-A complete [type] with:
-- [Component 1]
-- [Component 2]
-- [Documentation requirements]
-- [Setup/deployment instructions]
-```
-
-See `examples.md` for complete PRD examples.
+Your PRD should clearly define what you want to build. See [examples.md](./examples.md) for complete PRD examples and templates.
 
 ## Usage Examples
 
-### Example 1: Building a REST API
-
-```bash
-# Create your PRD
-cat > api_prd.md << 'EOF'
-# Task Management REST API
-
-## Overview
-Build a RESTful API for task management with CRUD operations.
-
-## Requirements
-- User authentication with JWT
-- Task CRUD endpoints
-- Task filtering and search
-- PostgreSQL database
-
-## Deliverable
-Complete Node.js/Express application with API endpoints
-EOF
-
-# Run the supervisor
-/rs api_prd.md
-```
-
-The supervisor will:
-1. Analyze API requirements
-2. Create implementation plan
-3. Present plan for your approval
-4. Generate detailed specification
-5. Create initial checkpoint
-6. Implement draft API code (using Implementer agent)
-7. Present draft for your review
-8. Create draft checkpoint
-9. Incorporate your feedback
-10. Deliver final API implementation
-
-### Example 2: Creating a System Design
-
-```bash
-# Create design PRD
-cat > design_prd.md << 'EOF'
-# E-Commerce Platform Architecture
-
-## Overview
-Design the system architecture for a scalable e-commerce platform.
-
-## Requirements
-- Microservices architecture
-- Handle 10,000 concurrent users
-- Support multiple payment gateways
-- Real-time inventory management
-
-## Deliverable
-Comprehensive architecture document with diagrams and component descriptions
-EOF
-
-# Run the supervisor
-/supervisor design_prd.md
-```
-
-The supervisor selects the **Designer** agent to create comprehensive architecture documentation with diagrams.
-
-### Example 3: Generating Documentation
-
-```bash
-# Create documentation PRD
-cat > docs_prd.md << 'EOF'
-# API Documentation for Payment Service
-
-## Overview
-Create comprehensive API documentation for our payment processing service.
-
-## Requirements
-- Document all REST endpoints
-- Include request/response examples
-- Authentication and authorization guide
-- Error codes and handling
-- Rate limiting information
-
-## Deliverable
-Markdown documentation with code examples
-EOF
-
-/rs docs_prd.md
-```
-
-The supervisor selects the **Writer** agent to create detailed technical documentation.
-
-### Example 4: Resuming After Interruption
-
-```bash
-# Original invocation (interrupted during draft creation)
-/rs project_prd.md
-# ... session interrupted ...
-
-# Later, resume the session
-/rs project_prd.md
-# Supervisor detects previous session and asks to resume
-# Select "Yes" to continue from where you left off
-```
-
-### Example 5: Using Checkpoints
-
-```bash
-# Run the workflow
-/rs implementation_prd.md
-# ... workflow completes through draft review ...
-# You approve the draft
-# ... final version is created ...
-
-# Later, you want to provide different feedback
-/rewind
-# Select the "Draft Checkpoint" to return
-# Provide new feedback
-# Get a different final version
-```
+For examples including system design, documentation, resumption patterns, and complex scenarios, see [examples.md](./examples.md).
 
 ## Error Handling
 
@@ -446,7 +253,7 @@ For complex projects:
 ls path/to/prd.md
 
 # Use absolute path if needed
-/rs /full/path/to/prd.md
+/real-tools:supervisor /full/path/to/prd.md
 ```
 
 ### Issue: Agent fails during execution
@@ -470,7 +277,7 @@ ls .supervisor/state.json
 
 # If corrupted, delete and start fresh
 rm -rf .supervisor/
-/rs path/to/prd.md
+/real-tools:supervisor path/to/prd.md
 ```
 
 ### Issue: Final deliverable doesn't match expectations
@@ -518,7 +325,7 @@ The supervisor explicitly avoids work not required by the PRD:
 
 ## Components
 
-The Real Supervisor skill consists of:
+The Supervisor skill consists of:
 
 - **SKILL.md** - Core supervisor instructions for Claude Code
 - **examples.md** - Usage examples, common patterns, and structure examples
@@ -547,4 +354,4 @@ The supervisor implements these principles:
 
 Skill version: 1.0.0
 
-Part of Real Supervisor Plugin v1.0.0
+Part of Supervisor Plugin v1.0.0
